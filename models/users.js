@@ -30,6 +30,22 @@ userSchema.pre("save",async function(next){
     next();
 })
 
+userSchema.pre('findOneAndUpdate', async function (next) {
+  const update = this.getUpdate();
+
+  if (update.password) {
+    try {
+      const hashed = await bcrypt.hash(update.password, 10);
+      this.setUpdate({ ...update, password: hashed });
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  next();
+});
+
+
 userSchema.methods.checkPassword=async function(password){
     return await bcrypt.compare(password,this.password)
 }

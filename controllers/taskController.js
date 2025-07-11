@@ -18,7 +18,20 @@ export const createTask=async(req,res)=>{
 
 export const getTask=async(req,res)=>{
     try{
-        const Tasks=await Task.find({assignTo:req.user.id});
+        const Tasks=await Task.find({assignTo:req.user.id}).populate("assignTo","name email role");
+        res.status(200).json({
+            message:"Task retreived successful",
+            tasksList:Tasks
+        })
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message:"Internal server error"})
+    }
+}
+
+export const getAllTasks=async(req,res)=>{
+       try{
+        const Tasks=await Task.find().populate("assignTo","name email role");
         res.status(200).json({
             message:"Task retreived successful",
             tasksList:Tasks
@@ -48,6 +61,25 @@ export const updateTask=async(req,res)=>{
         res.status(500).json({message:"Internal server error"})
     }
 
+}
+
+export const changeStatus=async(req,res)=>{
+    const {status,id}=req.body;
+    if(!id){
+        res.status(400).json({message:"need to select task for changing its status"})
+    }
+    try{
+        const TaskAssigned=await Task.findById(id)
+        if(TaskAssigned?.assignTo==req.user.id){
+            const task=await Task.findByIdAndUpdate(id,{status},{new:true})
+            res.status(200).json({message:"status changed successfully",task})
+        }else{
+             res.status(400).json({message:"task is not assigned to you, your manager or admin change its status or task assinged to can change status"})
+        }
+    }catch(err){
+        console.error(err);
+        res.status(500).json({message:"Internal server error"})
+    }
 }
 
 
