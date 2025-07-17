@@ -32,6 +32,7 @@ userSchema.pre("save",async function(next){
 
 userSchema.pre('findOneAndUpdate', async function (next) {
   const update = this.getUpdate();
+  console.log(update.password)
 
   if (update.password) {
     try {

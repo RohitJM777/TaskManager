@@ -5,7 +5,8 @@ import cors from "cors"
 import authRouter from "./routes/authRouter.js"
 import taskRouter from "./routes/taskRouter.js"
 import roleRouter from "./routes/roleRouter.js"
-
+import assignmentRouter from "./routes/studentAssignmentRouter.js"
+import studentRouter from "./routes/studentRouter.js"
 
 dotenv.config()
 dbConnection()
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api/auth",authRouter)
 app.use("/api/tasks",taskRouter)
 app.use("/api/roles",roleRouter)
+app.use("/api/assignments",assignmentRouter)
+app.use("/api/students",studentRouter)
 
 
 app.listen(PORT,()=>{

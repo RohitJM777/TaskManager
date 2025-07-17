@@ -14,5 +14,5 @@ router.get("/admin",protect,authorization('admin'),(req,res)=>{
 })
 
 router.post("/changePasword",protect,changePasword)
-router.get("/getAllusers",protect,authorization('admin') ,getAllusers)
+router.get("/getAllusers",protect,authorization('admin','manager','team-lead') ,getAllusers)
 export default router;
